@@ -70,5 +70,3 @@ jobs:
           prerelease: ${{ steps.vars.outputs.prerelease }}
           make_latest: ${{ steps.vars.outputs.latest }}
           files: dist/lednetwf.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
