@@ -251,7 +251,7 @@ class LEDNETWFFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         # Let's see if those stored values are available
         led_count = getattr(self._instance._model_interface, 'led_count', 64)
         if getattr(self._instance, "_model", None) in (0x56, 0x80):
-            chip_type = LedTypes_RingLight.WS2812B
+            chip_type = LedTypes_StripLight.WS2812B
         else:
             chip_type = LedTypes_StripLight.WS2812B
         color_order   = getattr(self._instance._model_interface, 'color_order', ColorOrdering.GRB) #"GRB")
