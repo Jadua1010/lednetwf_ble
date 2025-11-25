@@ -366,26 +366,6 @@ class Model0x56(DefaultModelAbstraction):
                 # mode_type 0x62 (music) also has no RGB color in this notification
                 LOGGER.debug(f"Decoded notification data: On: {self.is_on}, Mode: {mode_type:02x}, Effect: {effect_num}, Speed: {effect_speed if effect_speed is not None else 'Unknown'}, RGB: {rgb_color}")
                 self.update_effect_state(mode_type, effect_num, rgb_color, effect_speed)
-                
-            elif list(data[5:7]) == [0x19, 0x1a]:
-                LOGGER.debug("Normal Status response received - Long type")
-                # Parse power state: 0x23 = on, 0x24 = off, anything else = unknown
-                if data[14] == 0x23:
-                    self.is_on = True
-                elif data[14] == 0x24:
-                    self.is_on = False
-                else:
-                    LOGGER.warning(f"Unknown power state byte 0x{data[14]:02X}, setting to None")
-                    self.is_on = None
-                mode_type    = data[15]
-                effect_num   = data[16]
-                effect_speed = data[17]
-                # for mode 0x66 (single color) & 0x67  (build-in effects)this does NOT contain the RGB colour! Also brightness does not seem to be in this response
-                rgb_color    = (data[18], data[19], data[20])
-                # Background color is NOT reliably encoded in notifications - skip parsing it
-                # The internal background color state will be managed by the user's background light entity
-                self.update_effect_state(mode_type, effect_num, rgb_color, effect_speed, brightness=data[15], bg_rgb_color=None) # TODO: In "25" mode, brightness is byte 14
-                LOGGER.debug(f"Status response. Is on: {self.is_on}, RGB colour: {rgb_color}, HS colour: {self.hs_color}, Brightness: {self.brightness}, Mode: {mode_type}, Effect: {effect_num}, Speed: {effect_speed}")
             else:
                 LOGGER.debug("Unknown response received")
                 return None
